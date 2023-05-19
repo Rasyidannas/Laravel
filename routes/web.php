@@ -39,12 +39,12 @@ $posts = [
     ]
 ];
 
-Route::get('/posts', function () use($posts) {
+Route::get('/posts', function () use ($posts) {
     return view('posts.index', ['posts' => $posts]);
 });
 
 //this {id} as a parameters and where is for constraints/limit 
-Route::get('/posts/{id}', function ($id) use($posts) {
+Route::get('/posts/{id}', function ($id) use ($posts) {
 
     //this is will be go 404 page when id prameters is not match with $posts
     abort_if(!isset($posts[$id]), 404);
@@ -57,3 +57,9 @@ Route::get('/posts/{id}', function ($id) use($posts) {
 Route::get('/recent-posts/{days_ago?}', function ($daysAgo = 20) {
     return 'Post from ' . $daysAgo . ' days ago';
 })->name('post.recent.index');
+
+Route::get('/fun/response', function () use ($posts) {
+    return response($posts, 201)
+        ->header('Content-Type', 'application/json')
+        ->cookie('MY_COOKIE', 'Rasyid Annas', 3600);
+});
