@@ -58,37 +58,40 @@ Route::get('/recent-posts/{days_ago?}', function ($daysAgo = 20) {
     return 'Post from ' . $daysAgo . ' days ago';
 })->name('post.recent.index');
 
-Route::get('/fun/response', function () use ($posts) {
-    return response($posts, 201)
-        ->header('Content-Type', 'application/json')
-        ->cookie('MY_COOKIE', 'Rasyid Annas', 3600);
-});
-
-//this is for redirect/force visit page you want
-Route::get('/fun/redirect', function() {
-    return redirect('/contact');
-});
-
-// this will back to the previous page
-Route::get('/fun/back', function() {
-    return back();
-});
-
-Route::get('/fun/named-route', function() {
-    return redirect()->route('posts.show', ['id' => 1]);//posts.show is route name
-});
-
-//this is for riderect to outside domain
-Route::get('/fun/away', function() {
-    return redirect()->away('https://google.com');
-});
-
-// this is will automatically return JSON
-Route::get('/fun/json', function() use($posts) {
-    return response()->json($posts);
-});
-
-Route::get('/fun/download', function() {
-    return response()->download(public_path('/Creativesshits.png'), 'portfolio.png');//this will be donwload file in public
-});
+// this is grouping route
+Route::prefix('/fun')->name('fun.')->group(function() use($posts){
+    Route::get('response', function () use ($posts) {
+        return response($posts, 201)
+            ->header('Content-Type', 'application/json')
+            ->cookie('MY_COOKIE', 'Rasyid Annas', 3600);
+    })->name('responses');
+    
+    //this is for redirect/force visit page you want
+    Route::get('redirect', function() {
+        return redirect('/contact');
+    })->name('redirect');
+    
+    // this will back to the previous page
+    Route::get('back', function() {
+        return back();
+    })->name('back');
+    
+    Route::get('named-route', function() {
+        return redirect()->route('posts.show', ['id' => 1]);//posts.show is route name
+    })->name('named-route');
+    
+    //this is for riderect to outside domain
+    Route::get('away', function() {
+        return redirect()->away('https://google.com');
+    })->name('away');
+    
+    // this is will automatically return JSON
+    Route::get('json', function() use($posts) {
+        return response()->json($posts);
+    })->name('json');
+    
+    Route::get('download', function() {
+        return response()->download(public_path('/Creativesshits.png'), 'portfolio.png');//this will be donwload file in public
+    })->name('download');
+});    
 
