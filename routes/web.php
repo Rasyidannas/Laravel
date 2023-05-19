@@ -88,3 +88,7 @@ Route::get('/fun/json', function() use($posts) {
     return response()->json($posts);
 });
 
+Route::get('/fun/download', function() {
+    return response()->download(public_path('/Creativesshits.png'), 'portfolio.png');//this will be donwload file in public
+});
+
