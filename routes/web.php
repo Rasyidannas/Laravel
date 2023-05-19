@@ -82,3 +82,9 @@ Route::get('/fun/named-route', function() {
 Route::get('/fun/away', function() {
     return redirect()->away('https://google.com');
 });
+
+// this is will automatically return JSON
+Route::get('/fun/json', function() use($posts) {
+    return response()->json($posts);
+});
+
