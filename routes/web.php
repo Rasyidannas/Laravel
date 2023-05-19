@@ -51,7 +51,7 @@ Route::get('/posts/{id}', function ($id) use ($posts) {
 
     // THis is Rendering with vies and store data in template
     return view('posts.show', ['post' => $posts[$id]]);
-})->name('post.show');
+})->name('posts.show');
 
 //this ? is an optional parameters with default value
 Route::get('/recent-posts/{days_ago?}', function ($daysAgo = 20) {
@@ -62,4 +62,23 @@ Route::get('/fun/response', function () use ($posts) {
     return response($posts, 201)
         ->header('Content-Type', 'application/json')
         ->cookie('MY_COOKIE', 'Rasyid Annas', 3600);
+});
+
+//this is for redirect/force visit page you want
+Route::get('/fun/redirect', function() {
+    return redirect('/contact');
+});
+
+// this will back to the previous page
+Route::get('/fun/back', function() {
+    return back();
+});
+
+Route::get('/fun/named-route', function() {
+    return redirect()->route('posts.show', ['id' => 1]);//posts.show is route name
+});
+
+//this is for riderect to outside domain
+Route::get('/fun/away', function() {
+    return redirect()->away('https://google.com');
 });
