@@ -59,7 +59,7 @@ Route::get('/posts/{id}', function ($id) use ($posts) {
 //this ? is an optional parameters with default value
 Route::get('/recent-posts/{days_ago?}', function ($daysAgo = 20) {
     return 'Post from ' . $daysAgo . ' days ago';
-})->name('post.recent.index');
+})->name('post.recent.index')->middleware('auth');
 
 // this is grouping route
 Route::prefix('/fun')->name('fun.')->group(function() use($posts){
