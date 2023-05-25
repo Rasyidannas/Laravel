@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AboutController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +22,9 @@ Route::get('/', [HomeController::class, 'home'])->name('home.index');
 
 //this is using controller
 Route::get('/contact', [HomeController::class, 'contact'])->name('home.contact');
+
+//this is single action controllers
+Route::get('/single', AboutController::class);
 
 $posts = [
     1 => [
