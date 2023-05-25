@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,11 +16,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 //name is for naming in php artisan route:list
-//this is simple view rendering
-Route::view('/', 'home.index')->name('home.index');
+//this is using controller
+Route::get('/', [HomeController::class, 'home'])->name('home.index');
 
-//this is simple view rendering
-Route::view('/contact', 'home.contact')->name('home.contact');
+//this is using controller
+Route::get('/contact', [HomeController::class, 'contact'])->name('home.contact');
 
 $posts = [
     1 => [
