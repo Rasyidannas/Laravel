@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\BlogPost;
 
 class PostsController extends Controller
 {
@@ -30,7 +31,9 @@ class PostsController extends Controller
      */
     public function index()
     {
-        return view('posts.index', ['posts' => $this->posts]);
+        // orderBy is a query builder
+        // return view('posts.index', ['posts' => BlogPost::orderBy('created_at', 'desc')->take(5)->get()]);
+        return view('posts.index', ['posts' => BlogPost::all()]);
     }
 
     /**
@@ -55,9 +58,10 @@ class PostsController extends Controller
     public function show(string $id)
     {
         // for 404 page if posts id is wrong
-        abort_if(!isset($this->posts[$id]), 404);
+        // abort_if(!isset($this->posts[$id]), 404);
 
-        return view('posts.show', ['post' => $this->posts[$id]]);
+        //faindOrFail is a collection ORM Laravel
+        return view('posts.show', ['post' => BlogPost::findOrFail($id)]);
     }
 
     /**
