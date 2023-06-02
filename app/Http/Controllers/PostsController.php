@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePost;
 use Illuminate\Http\Request;
 use App\Models\BlogPost;
 
@@ -41,15 +42,29 @@ class PostsController extends Controller
      */
     public function create()
     {
-        //
+        return view('posts.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    // StorePost is Request custom
+    public function store(StorePost $request)
     {
-        //
+        $validated = $request->validated();
+        //this is Instatiate BlogPost model 
+        // $post = new BlogPost();
+        // $post->title = $validated['title'];
+        // $post->content = $validated['content'];
+        // $post->save();
+
+        // using mass assigment connect with model BlogPost
+        $post = BlogPost::create($validated);
+
+        // success session
+        $request->session()->flash('status', 'The blog post was created!');
+
+        return redirect()->route('posts.show', ['post' => $post->id]);
     }
 
     /**

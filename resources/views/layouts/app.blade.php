@@ -8,6 +8,12 @@
 </head>
 <body>
     <div>
+        {{-- print a session status from controller --}}
+        @if (session('status'))
+            <div style="background: red; color: white;">
+                {{ session('status') }}
+            </div>
+        @endif
         {{-- this @yield for place @section when call --}}
         @yield('content')
     </div>
