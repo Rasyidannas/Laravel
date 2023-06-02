@@ -27,7 +27,7 @@ Route::get('/contact', [HomeController::class, 'contact'])->name('home.contact')
 //this is single action controllers
 Route::get('/single', AboutController::class);
 
-Route::resource('posts', PostsController::class)->only(['index', 'show', 'create', 'store']);
+Route::resource('posts', PostsController::class)->only(['index', 'show', 'create', 'store', 'edit', 'update', 'destroy']);
 
 
 // this is grouping route
