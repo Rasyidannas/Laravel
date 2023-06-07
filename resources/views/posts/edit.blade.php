@@ -8,6 +8,6 @@
         {{-- this is http method and we set with put because update form --}}
         @method('PUT')
         @include('posts.partials.form')
-        <div><input type="submit" value="Update"></div>
+        <div><input type="submit" value="Update" class="btn btn-primary btn-block"></div>
     </form>
 @endsection
