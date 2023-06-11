@@ -50,12 +50,34 @@ class PostTest extends TestCase
             'title' => 'Valid title',
             'content' => 'At least 10 characters'
         ];
-        
+
         //act & assert
         $this->post('/posts', $params)
-            ->assertStatus(302)
+            ->assertStatus(302)//this status succes redirect page
             ->assertSessionHas('status');
 
         $this->assertEquals(session('status'), 'The blog post was created!');
+    }
+
+    public function teststoreFail()
+    {
+        //arrange
+        $params = [
+            'title' => 'a',
+            'content' => 'a',
+        ];
+
+        //act & assert
+        $this->post('/posts', $params)
+            ->assertStatus(302)
+            ->assertSessionHas('errors');
+
+        $messages = session('errors')->getMessages();
+
+        // dd($messages->getMessages());
+
+        $this->assertEquals($messages['title'][0], 'The title field must be at least 5 characters.');
+        $this->assertEquals($messages['content'][0], 'The content field must be at least 10 characters.');
+
     }
 }
