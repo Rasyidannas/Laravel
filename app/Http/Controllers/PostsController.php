@@ -36,8 +36,8 @@ class PostsController extends Controller
         // DB::connection()->enableQueryLog();
 
         // //this is eager loading
-        // // $posts = BlogPost::with('comment')->get();
-        
+        // // $posts = BlogPost::with('comments')->get();
+
         // //this is lazy loading
         // $posts = BlogPost::all();
 
@@ -46,13 +46,13 @@ class PostsController extends Controller
         //         echo $comment->content;
         //     }
         // }
-        
+
 
         // dd(DB::getQueryLog());
 
         // orderBy is a query builder
         // return view('posts.index', ['posts' => BlogPost::orderBy('created_at', 'desc')->take(5)->get()]);
-        return view('posts.index', ['posts' => BlogPost::all()]);
+        return view('posts.index', ['posts' => BlogPost::withCount('comments')->get()]);
     }
 
     /**
