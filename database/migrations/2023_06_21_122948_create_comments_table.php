@@ -17,8 +17,8 @@ return new class extends Migration
 
             $table->text('content');
 
-            $table->unsignedInteger('post_id')->index();
-            $table->foreign('post_id')->references('id')->on('blog_posts');
+            $table->unsignedInteger('blog_post_id')->index();
+            $table->foreign('blog_post_id')->references('id')->on('blog_posts');
         });
     }
 

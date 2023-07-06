@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\BlogPost;
+use App\Models\Comment;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -24,7 +25,7 @@ class PostTest extends TestCase
         // $response->assertSeeText('Blog post was deleted!');
     }
 
-    public function testSee1BlogPostsWhenThereIs1()
+    public function testSee1BlogPostsWhenThereIs1WithNoComments()
     {
         //arrange
         $post = $this->createDummyBlogpost();
@@ -40,6 +41,23 @@ class PostTest extends TestCase
             'title' => 'New Title',
             'content' => 'Content of the Blog post'
         ]);
+    }
+
+    public function testSee1BlogPostWithComments()
+    {
+        //arrange
+        $post = $this->createDummyBlogpost();
+        $comment = new Comment();
+
+        // this is Instantiating Models with call factory
+        $comment::factory()->count(4)->create([
+            'blog_post_id' => $post->id
+        ]);
+
+        // act
+        $response = $this->get('/posts');
+
+        $response->assertSeeText('4 comments');
     }
 
     public function testStoreValid()
