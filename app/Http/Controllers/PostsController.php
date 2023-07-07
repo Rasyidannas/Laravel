@@ -94,7 +94,7 @@ class PostsController extends Controller
         // abort_if(!isset($this->posts[$id]), 404);
 
         //faindOrFail is a collection ORM Laravel
-        return view('posts.show', ['post' => BlogPost::findOrFail($id)]);
+        return view('posts.show', ['post' => BlogPost::with('comments')->findOrFail($id)]);
     }
 
     /**

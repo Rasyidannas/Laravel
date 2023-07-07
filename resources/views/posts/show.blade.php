@@ -14,4 +14,18 @@
         <div class="alert alert-info">New!</div>
     @endif
 
+    <h1>Comments</h1>
+
+    @forelse($post->comments as $comment)
+        <p>
+            {{ $comment->content }}
+        </p>
+        
+        <p class="text-muted">
+            added {{ $comment->created_at->diffForHumans() }}
+        </p>
+    @empty 
+        <p>No comments yet!</p>
+    
+    @endforelse
 @endsection
