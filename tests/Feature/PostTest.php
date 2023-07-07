@@ -134,26 +134,35 @@ class PostTest extends TestCase
             'title' => 'New Title',
             'content' => 'Content of the Blog post'
         ]);
-        
+
         $this->delete("/posts/{$post->id}")
             ->assertStatus(302)
             ->assertSessionHas('status');
 
-            $this->assertEquals(session('status'), 'Blog post was deleted!');
-            $this->assertDatabaseMissing('blog_posts', [
-                'title' => 'New Title',
-                'content' => 'Content of the Blog post'
-            ]); //this is shortcut make $post to array
+        $this->assertEquals(session('status'), 'Blog post was deleted!');
+        $this->assertDatabaseMissing('blog_posts', [
+            'title' => 'New Title',
+            'content' => 'Content of the Blog post'
+        ]); //this is shortcut make $post to array
     }
 
     //this is call instatiate Blogpost model with fill it
     private function createDummyBlogpost(): Blogpost
     {
         $post = new BlogPost();
-        $post->title = 'New Title';
-        $post->content = 'Content of the Blog post';
-        $post->save();
+        // $post->title = 'New Title';
+        // $post->content = 'Content of the Blog post';
+        // $post->save();
 
-        return $post;
+        //this is factory state directly
+        // $post::factory()->state([
+        //     'title'     => 'New Title',
+        //     'content'   => 'Content of the Blog post'
+        // ])->create();
+
+        //this is call from database factories
+        return $post::factory()->suspended()->create();
+
+        // return $post;
     }
 }
