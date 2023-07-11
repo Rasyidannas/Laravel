@@ -66,3 +66,9 @@ Route::resource('posts', PostsController::class)->only(['index', 'show', 'create
 //         return response()->download(public_path('/Creativesshits.png'), 'portfolio.png');//this will be donwload file in public
 //     })->name('download');
 // });    
+
+
+//1. composer require laravel/ui
+//2. php artisan ui:controllers
+//this is for authentication route but we need install above commands
+Auth::routes();
