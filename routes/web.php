@@ -19,7 +19,9 @@ use Illuminate\Support\Facades\Route;
 
 //name is for naming in php artisan route:list
 //this is using controller
-Route::get('/', [HomeController::class, 'home'])->name('home.index');
+Route::get('/', [HomeController::class, 'home'])->name('home.index')
+// ->middleware('auth')//middleware is for only user login/authenticated
+;
 
 //this is using controller
 Route::get('/contact', [HomeController::class, 'contact'])->name('home.contact');

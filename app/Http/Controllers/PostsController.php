@@ -9,6 +9,12 @@ use App\Models\BlogPost;
 
 class PostsController extends Controller
 {
+    public function __construct()
+    {
+        //$this->middleware('auth');//this is for only user login/authenticated
+        $this->middleware('auth')->only(['create', 'store', 'edit', 'update', 'destroy']);
+    }
+
     private $posts = [
         1 => [
             'title' => 'Intro to Laravel',
