@@ -3,8 +3,16 @@
 namespace Tests;
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use App\Models\User;
 
 abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
+
+    protected function user()
+    {
+        $user = new User();
+
+        return $user::factory()->create();
+    }
 }

@@ -62,14 +62,21 @@ class PostTest extends TestCase
 
     public function testStoreValid()
     {
+        //authentication
+        // $user = $this->user();
+        
         //arrange
         $params = [
             'title' => 'Valid title',
             'content' => 'At least 10 characters'
         ];
 
+        //this will execute $user
+        // $this->actingAs($user);
+        
         //act & assert
-        $this->post('/posts', $params)
+        $this->actingAs($this->user())//this for authenticating
+            ->post('/posts', $params)
             ->assertStatus(302) //this status succes redirect page
             ->assertSessionHas('status');
 
@@ -78,6 +85,8 @@ class PostTest extends TestCase
 
     public function teststoreFail()
     {
+
+
         //arrange
         $params = [
             'title' => 'a',
@@ -85,7 +94,8 @@ class PostTest extends TestCase
         ];
 
         //act & assert
-        $this->post('/posts', $params)
+        $this->actingAs($this->user())
+            ->post('/posts', $params)
             ->assertStatus(302)
             ->assertSessionHas('errors');
 
@@ -113,7 +123,8 @@ class PostTest extends TestCase
             'content' => 'Content of the Blog post'
         ]); //this is shortcut make $post to array
 
-        $this->put("/posts/{$post->id}", $params)
+        $this->actingAs($this->user())
+            ->put("/posts/{$post->id}", $params)
             ->assertStatus(302)
             ->assertSessionHas('status');
 
@@ -135,7 +146,8 @@ class PostTest extends TestCase
             'content' => 'Content of the Blog post'
         ]);
 
-        $this->delete("/posts/{$post->id}")
+        $this->actingAs($this->user())
+            ->delete("/posts/{$post->id}")
             ->assertStatus(302)
             ->assertSessionHas('status');
 
