@@ -15,9 +15,9 @@ return new class extends Migration
             // this is for production environment and make it table null, so we can keep database with all data
             // $table->unsignedInteger('user_id')->nullable();
             
-            if(env('DB_CONNECTION') === 'sqlite_testing'){
+            if (env('DB_CONNECTION') === 'sqlite_testing') {
                 $table->unsignedInteger('user_id')->default(0);
-            }else{
+            } else {
                 $table->unsignedInteger('user_id');
             }
 
@@ -32,8 +32,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('blog_posts', function (Blueprint $table) {
-            $table->dropColumn('user_id');
             $table->dropForeign(['user_id']);
+            $table->dropColumn('user_id');
         });
     }
 };
