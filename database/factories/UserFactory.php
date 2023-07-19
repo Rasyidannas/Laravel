@@ -35,4 +35,15 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    //factory state is for custom and if one is missng column it will use defination factory
+    public function default(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'name' => 'Rasyid Annas',
+                'email' => 'rasyid@gmail.com'
+            ];
+        });
+    }
 }
