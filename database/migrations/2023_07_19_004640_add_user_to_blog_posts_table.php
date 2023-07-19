@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::table('blog_posts', function (Blueprint $table) {
             // this is for production environment and make it table null, so we can keep database with all data
             // $table->unsignedInteger('user_id')->nullable();
-            $table->unsignedInteger('user_id');
             
             if(env('DB_CONNECTION') === 'sqlite_testing'){
                 $table->unsignedInteger('user_id')->default(0);
