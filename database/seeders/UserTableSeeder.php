@@ -22,8 +22,10 @@ class UserTableSeeder extends Seeder
         //     'remember_token' => Str::random(10),
         // ]);
 
+        $userCount = max((int)$this->command->ask('How many users would you like?', 20), 1);
+
         //this is using faker factories
         User::factory()->default()->create();
-        User::factory()->count(20)->create();
+        User::factory()->count($userCount)->create();
     }
 }
