@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\BlogPost as ModelsBlogPost;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -19,11 +20,16 @@ class BlogPost extends Model
         return $this->hasMany('App\Models\Comment');
     }
 
-    //this is for delete comments(foreign key)
-    // public static function booted(): void
-    // {
-    //     static::deleting(function (BlogPost $blogPost) {
-    //         $blogPost->comments()->delete();
-    //     });
-    // }
+    public static function booted(): void
+    {
+        //this is for delete comments(foreign key) and it can related to comments for soft deleted
+        static::deleting(function (BlogPost $blogPost) {
+            $blogPost->comments()->delete();
+        });
+
+        //this is for restore soft delete for blogpost and comments table
+        static::restoring(function (BlogPost $blogPost) {
+            $blogPost->comments()->restore();
+        });
+    }
 }
