@@ -16,7 +16,13 @@ return new class extends Migration
             $table->timestamps();
     
             $table->string('title')->default('');
-            $table->text('content')->default('');
+
+            //sqlite_testing for php artisan test
+            if (env('DB_CONNECTION') === 'sqlite_testing') {
+                $table->text('content')->default('');
+            } else {
+                $table->text('content');
+            }
         });
     }
 
