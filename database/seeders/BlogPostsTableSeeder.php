@@ -14,7 +14,7 @@ class BlogPostsTableSeeder extends Seeder
      */
     public function run(): void
     {
-        $blogCount = (int)$this->command->ask('How many users would you like?', 50);
+        $blogCount = (int)$this->command->ask('How many posts would you like?', 50);
 
         $users = User::all();
 

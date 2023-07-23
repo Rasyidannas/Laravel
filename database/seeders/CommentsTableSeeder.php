@@ -21,7 +21,7 @@ class CommentsTableSeeder extends Seeder
             return;
         }
 
-        $commentCount = (int)$this->command->ask('How many users would you like?', 70);
+        $commentCount = (int)$this->command->ask('How many comments would you like?', 70);
 
         Comment::factory()->count($commentCount)->make()->each(function ($comment) use ($posts) {
             $comment->blog_post_id = $posts->random()->id;

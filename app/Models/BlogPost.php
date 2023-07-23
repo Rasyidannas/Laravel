@@ -15,4 +15,12 @@ class BlogPost extends Model
     {
         return $this->hasMany('App\Models\Comment');
     }
+
+    //this is for delete comments(foreign key)
+    public static function booted(): void
+    {
+        static::deleting(function (BlogPost $blogPost) {
+            $blogPost->comments()->delete();
+        });
+    }
 }
