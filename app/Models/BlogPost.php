@@ -17,10 +17,10 @@ class BlogPost extends Model
     }
 
     //this is for delete comments(foreign key)
-    public static function booted(): void
-    {
-        static::deleting(function (BlogPost $blogPost) {
-            $blogPost->comments()->delete();
-        });
-    }
+    // public static function booted(): void
+    // {
+    //     static::deleting(function (BlogPost $blogPost) {
+    //         $blogPost->comments()->delete();
+    //     });
+    // }
 }
