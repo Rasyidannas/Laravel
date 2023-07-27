@@ -135,13 +135,13 @@ class PostsController extends Controller
         
         //for short hand authorization
         $this->authorize($post);
-
+        
         $validated = $request->validated();
         $post->fill($validated);
         $post->save();
-
+        
         $request->session()->flash('status', 'Blog post was updated!');
-
+        
         return redirect()->route('posts.show', ['post' => $post->id]);
     }
 
@@ -151,11 +151,14 @@ class PostsController extends Controller
     public function destroy(string $id)
     {
         $post = BlogPost::findOrFail($id);
-
+        
         //this is for authorization
-        if (Gate::denies($post)) {
-            abort(403, "You can't delete this blog post!");
-        }
+        // if (Gate::denies($post)) {
+        //     abort(403, "You can't delete this blog post!");
+        // }
+
+        //for short hand authorization
+        $this->authorize($post);
 
         $post->delete();
 

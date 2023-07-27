@@ -109,8 +109,9 @@ class PostTest extends TestCase
 
     public function testUpdateValid()
     {
+        $user = $this->user();
         //arrange
-        $post = $this->createDummyBlogpost();
+        $post = $this->createDummyBlogpost($user->id);
 
         $params = [
             'title' => 'A new named title',
@@ -123,7 +124,7 @@ class PostTest extends TestCase
             'content' => 'Content of the Blog post'
         ]); //this is shortcut make $post to array
 
-        $this->actingAs($this->user())
+        $this->actingAs($user)
             ->put("/posts/{$post->id}", $params)
             ->assertStatus(302)
             ->assertSessionHas('status');
@@ -139,14 +140,15 @@ class PostTest extends TestCase
 
     public function testDeleted()
     {
+        $user = $this->user();
         //arrange
-        $post = $this->createDummyBlogpost();
+        $post = $this->createDummyBlogpost($user->id);
         $this->assertDatabaseHas('blog_posts', [
             'title' => 'New Title',
             'content' => 'Content of the Blog post'
         ]);
 
-        $this->actingAs($this->user())
+        $this->actingAs($user)
             ->delete("/posts/{$post->id}")
             ->assertStatus(302)
             ->assertSessionHas('status');
@@ -160,10 +162,12 @@ class PostTest extends TestCase
             'title' => 'New Title',
             'content' => 'Content of the Blog post'
         ]); //this is shortcut make $post to array
+
+
     }
 
     //this is call instatiate Blogpost model with fill it
-    private function createDummyBlogpost(): Blogpost
+    private function createDummyBlogpost($userId = null): Blogpost
     {
         $post = new BlogPost();
         // $post->title = 'New Title';
@@ -177,7 +181,11 @@ class PostTest extends TestCase
         // ])->create();
 
         //this is call from database factories
-        return $post::factory()->suspended()->create();
+        return $post::factory()->suspended()->create(
+            [
+                'user_id' => $userId ?? $this->user()->id,
+            ]
+        );
 
         // return $post;
     }
