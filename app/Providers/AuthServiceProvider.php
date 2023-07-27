@@ -33,9 +33,10 @@ class AuthServiceProvider extends ServiceProvider
         // });
 
         //this is same with above
-        Gate::define('posts.update', 'App\Policies\BlogPostPolicy@update');
-        Gate::define('posts.delete', 'App\Policies\BlogPostPolicy@delete');
+        // Gate::define('posts.update', 'App\Policies\BlogPostPolicy@update');
+        // Gate::define('posts.delete', 'App\Policies\BlogPostPolicy@delete');
 
+        //this is shorthand and same like above 
         Gate::resource('posts', 'App\Policies\BlogPostPolicy');
 
         //authorization for admin user
