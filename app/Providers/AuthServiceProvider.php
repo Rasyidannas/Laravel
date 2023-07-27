@@ -24,20 +24,26 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Gate::define('update-post', function(User $user, BlogPost $post) {
-            return $user->id === $post->user_id;
-        });
+        // Gate::define('update-post', function(User $user, BlogPost $post) {
+        //     return $user->id === $post->user_id;
+        // });
 
-        Gate::define('delete-post', function(User $user, BlogPost $post) {
-            return $user->id === $post->user_id;
-        });
+        // Gate::define('delete-post', function(User $user, BlogPost $post) {
+        //     return $user->id === $post->user_id;
+        // });
+
+        //this is same with above
+        Gate::define('posts.update', 'App\Policies\BlogPostPolicy@update');
+        Gate::define('posts.delete', 'App\Policies\BlogPostPolicy@delete');
+
+        Gate::resource('posts', 'App\Policies\BlogPostPolicy');
 
         //authorization for admin user
-        Gate::before(function (User $user, string $ability) {
-            if($user->is_admin && in_array($ability, ['update-post'])) {
-                return true;
-            }
-        });
+        // Gate::before(function (User $user, string $ability) {
+        //     if($user->is_admin && in_array($ability, ['posts.update'])) {
+        //         return true;
+        //     }
+        // });
         
         //authorization for admin user
         // Gate::after(function (User $user, string $ability, bool|null $result) {
