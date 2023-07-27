@@ -20,6 +20,11 @@ class BlogPost extends Model
         return $this->hasMany('App\Models\Comment');
     }
 
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
+
     public static function booted(): void
     {
         //this is for delete comments(foreign key) and it can related to comments for soft deleted
