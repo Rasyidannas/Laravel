@@ -20,11 +20,15 @@ use Illuminate\Support\Facades\Route;
 //name is for naming in php artisan route:list
 //this is using controller
 Route::get('/', [HomeController::class, 'home'])->name('home.index')
-// ->middleware('auth')//middleware is for only user login/authenticated
+    // ->middleware('auth')//middleware is for only user login/authenticated
 ;
 
 //this is using controller
 Route::get('/contact', [HomeController::class, 'contact'])->name('home.contact');
+
+Route::get('/secret', [HomeController::class, 'secret'])
+    ->name('home.secret')
+    ->middleware('can:home.secret'); //this is for authorization
 
 //this is single action controllers
 Route::get('/single', AboutController::class);
@@ -39,31 +43,31 @@ Route::resource('posts', PostsController::class)->only(['index', 'show', 'create
 //             ->header('Content-Type', 'application/json')
 //             ->cookie('MY_COOKIE', 'Rasyid Annas', 3600);
 //     })->name('responses');
-    
+
 //     //this is for redirect/force visit page you want
 //     Route::get('redirect', function() {
 //         return redirect('/contact');
 //     })->name('redirect');
-    
+
 //     // this will back to the previous page
 //     Route::get('back', function() {
 //         return back();
 //     })->name('back');
-    
+
 //     Route::get('named-route', function() {
 //         return redirect()->route('posts.show', ['id' => 1]);//posts.show is route name
 //     })->name('named-route');
-    
+
 //     //this is for riderect to outside domain
 //     Route::get('away', function() {
 //         return redirect()->away('https://google.com');
 //     })->name('away');
-    
+
 //     // this is will automatically return JSON
 //     Route::get('json', function() use($posts) {
 //         return response()->json($posts);
 //     })->name('json');
-    
+
 //     Route::get('download', function() {
 //         return response()->download(public_path('/Creativesshits.png'), 'portfolio.png');//this will be donwload file in public
 //     })->name('download');

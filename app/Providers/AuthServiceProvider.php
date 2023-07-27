@@ -26,6 +26,10 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Gate::define('home.secret', function (User $user) {
+            return $user->is_admin;
+        });
+
         // Gate::define('update-post', function(User $user, BlogPost $post) {
         //     return $user->id === $post->user_id;
         // });
