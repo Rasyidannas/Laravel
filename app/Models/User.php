@@ -50,6 +50,14 @@ class User extends Authenticatable
 
     public function scopeWithMostBlogposts(Builder $query)
     {
-        return $query->withCount('blogPosts')->orderBy('blog_posts_count', 'desc');//blog_post_count will be new field cause orderBy
+        return $query->withCount('blogPosts')->orderBy('blog_posts_count', 'desc'); //blog_post_count will be new field cause orderBy
+    }
+
+    public function scopeWithMostBlogPostsLastMonth(Builder $query)
+    {
+        return $query->withCount(['blogPosts' => function (Builder $query) {
+            $query->whereBetween(static::CREATED_AT, [now()->subMonths(1), now()]);
+        }])->has('blogPosts', '>=', 2)//yang memiliki blogpost lebih dari sama dengan 2
+            ->orderBy('blog_posts_count', 'desc'); //blog_post_count will be new field cause orderBy
     }
 }
