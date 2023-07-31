@@ -1,6 +1,20 @@
 {{-- @break($key == 2) --}}
 {{-- @continue($key == 1) --}}
-<h3><a href="{{ route('posts.show', ['post' => $post-> id]) }}">{{ $key }}. {{ $post->title }}</a></h3>
+
+{{-- {{ dd($post->trashed()) }} --}}
+
+<h3>
+    @if ($post->trashed())
+        <del>
+    @endif
+    
+    <a class="{{ $post->trashed() ? 'text-muted' : '' }}"
+    href="{{ route('posts.show', ['post' => $post-> id]) }}">{{ $key }}. {{ $post->title }}</a>
+    
+    @if ($post->trashed())
+        </del>
+    @endif
+</h3>
 
 <p class="text-muted">
     Added {{ $post->created_at->diffForHumans() }}
@@ -23,11 +37,13 @@
         <p>You can delete this post</p>
     @endcannot --}}
 
-    @can('delete', $post)
-        <form class="d-inline" action="{{ route('posts.destroy', ['post' => $post->id]) }}" method="POST">
-            @csrf
-            @method('DELETE')
-            <input type="submit" value="Deleted!" class="btn btn-danger">
-        </form>
-    @endcan
+    @if (!$post->trashed())
+        @can('delete', $post)
+            <form class="d-inline" action="{{ route('posts.destroy', ['post' => $post->id]) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <input type="submit" value="Deleted!" class="btn btn-danger">
+            </form>
+        @endcan
+    @endif
 </div>

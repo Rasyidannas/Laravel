@@ -47,7 +47,7 @@ class AuthServiceProvider extends ServiceProvider
 
         //authorization for admin user
         Gate::before(function (User $user, string $ability) {
-            if($user->is_admin && in_array($ability, ['update'])) {
+            if($user->is_admin && in_array($ability, ['update', 'delete'])) {
                 return true;
             }
         });
