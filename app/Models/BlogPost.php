@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\BlogPost as ModelsBlogPost;
+use App\Models\Scopes\LatestScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -27,6 +28,9 @@ class BlogPost extends Model
 
     public static function booted(): void
     {
+        //apply global scope
+        static::addGlobalScope(new LatestScope);
+
         //this is for delete comments(foreign key) and it can related to comments for soft deleted
         static::deleting(function (BlogPost $blogPost) {
             $blogPost->comments()->delete();
