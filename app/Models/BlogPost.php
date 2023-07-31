@@ -33,6 +33,13 @@ class BlogPost extends Model
         return $query->orderBy(static::CREATED_AT, 'desc');
     }
 
+    //this is local scope
+    public function scopeMostCommented(Builder $query)
+    {
+        //comments_count will be new field
+        return $query->withCount('comments')->orderBy('comments_count', 'desc');
+    }
+
     public static function booted(): void
     {
         //apply global scope

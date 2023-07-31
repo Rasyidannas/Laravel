@@ -59,7 +59,10 @@ class PostsController extends Controller
 
         // orderBy is a query builder
         // return view('posts.index', ['posts' => BlogPost::orderBy('created_at', 'desc')->take(5)->get()]);
-        return view('posts.index', ['posts' => BlogPost::latest()->withCount('comments')->get()]); //latest() this is from local scope in model
+        return view('posts.index', [
+            'posts' => BlogPost::latest()->withCount('comments')->get(),
+            'mostCommented' => BlogPost::mostCommented()->take(5)->get() //this is call local scope
+        ]); //latest() this is from local scope in model
     }
 
     /**
