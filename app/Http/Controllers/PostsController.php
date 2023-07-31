@@ -59,7 +59,7 @@ class PostsController extends Controller
 
         // orderBy is a query builder
         // return view('posts.index', ['posts' => BlogPost::orderBy('created_at', 'desc')->take(5)->get()]);
-        return view('posts.index', ['posts' => BlogPost::withCount('comments')->get()]);
+        return view('posts.index', ['posts' => BlogPost::latest()->withCount('comments')->get()]); //latest() this is from local scope in model
     }
 
     /**
@@ -105,6 +105,11 @@ class PostsController extends Controller
         // abort_if(!isset($this->posts[$id]), 404);
 
         //faindOrFail is a collection ORM Laravel
+        // return view('posts.show', ['post' => BlogPost::with(['comments' => function($query) {
+        //     return $query->latest(); //this is for call local scope with relationship this is first away
+        // }])->findOrFail($id)]);
+
+        //faindOrFail is a collection ORM Laravel
         return view('posts.show', ['post' => BlogPost::with('comments')->findOrFail($id)]);
     }
 
@@ -135,16 +140,16 @@ class PostsController extends Controller
         // if (Gate::denies('update-post', $post)) {
         //     abort(403, "You can't edit this blog post!");
         // }
-        
+
         //for short hand authorization
         $this->authorize($post);
-        
+
         $validated = $request->validated();
         $post->fill($validated);
         $post->save();
-        
+
         $request->session()->flash('status', 'Blog post was updated!');
-        
+
         return redirect()->route('posts.show', ['post' => $post->id]);
     }
 
@@ -154,7 +159,7 @@ class PostsController extends Controller
     public function destroy(string $id)
     {
         $post = BlogPost::findOrFail($id);
-        
+
         //this is for authorization
         // if (Gate::denies($post)) {
         //     abort(403, "You can't delete this blog post!");
