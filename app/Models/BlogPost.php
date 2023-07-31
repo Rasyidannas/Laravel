@@ -36,7 +36,7 @@ class BlogPost extends Model
     //this is local scope
     public function scopeMostCommented(Builder $query)
     {
-        //comments_count will be new field
+        //comments_count will be new field cause orderBy
         return $query->withCount('comments')->orderBy('comments_count', 'desc');
     }
 

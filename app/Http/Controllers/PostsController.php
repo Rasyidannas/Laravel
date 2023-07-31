@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePost;
 use Illuminate\Http\Request;
 use App\Models\BlogPost;
+use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 // use Illuminate\Support\Facades\DB;
 
@@ -61,7 +62,8 @@ class PostsController extends Controller
         // return view('posts.index', ['posts' => BlogPost::orderBy('created_at', 'desc')->take(5)->get()]);
         return view('posts.index', [
             'posts' => BlogPost::latest()->withCount('comments')->get(),
-            'mostCommented' => BlogPost::mostCommented()->take(5)->get() //this is call local scope
+            'mostCommented' => BlogPost::mostCommented()->take(5)->get(), //this is call local scope
+            'mostActive' => User::withMostBlogPosts()->take(5)->get()
         ]); //latest() this is from local scope in model
     }
 
