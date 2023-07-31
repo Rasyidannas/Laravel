@@ -84,6 +84,9 @@ class PostsController extends Controller
         // $post->content = $validated['content'];
         // $post->save();
 
+        //this is for set user_id in form creat post
+        $validated['user_id'] = $request->user()->id;
+
         // using mass assigment connect with model BlogPost
         $post = BlogPost::create($validated);
 
