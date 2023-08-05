@@ -8,12 +8,15 @@
     
     <h1>
         {{ $post->title }}
+        {{-- This is usig component --}}
         <x-badge :show="now()->diffInMinutes($post->created_at) < 5">
             Brand new post!
         </x-badge>
     </h1>
     <p>{{ $post->content }}</p>
-    <p>Added {{ $post->created_at->diffForHumans() }}</p>
+    {{-- this is using component  --}}
+    <x-updated :date="$post->created_at" :name="$post->user->name" />
+    <x-updated :date="$post->updated_at" :name="$post->user->name">Updated</x-updated>
 
 
     <h1>Comments</h1>
@@ -24,7 +27,8 @@
         </p>
         
         <p class="text-muted">
-            added {{ $comment->created_at->diffForHumans() }}
+            {{-- this is using component  --}}
+            <x-updated :date="$comment->created_at"/>
         </p>
     @empty 
         <p>No comments yet!</p>
