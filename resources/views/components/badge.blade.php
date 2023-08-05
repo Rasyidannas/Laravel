@@ -1,1 +1,5 @@
-<div class="badge bg-{{ $type ?? 'success' }}">{{ $slot }}</div>
+@if (!isset($show) || $show)
+    <span class="badge bg-{{ $type ?? 'success' }}">
+        {{ $slot }}
+    </span>
+@endif

@@ -6,20 +6,15 @@
 {{-- This will put in @yield('content') --}}
 @section('content')
     
-    <h1>{{ $post->title }}</h1>
+    <h1>
+        {{ $post->title }}
+        <x-badge :show="now()->diffInMinutes($post->created_at) < 5">
+            Brand new post!
+        </x-badge>
+    </h1>
     <p>{{ $post->content }}</p>
     <p>Added {{ $post->created_at->diffForHumans() }}</p>
 
-    @if(now()->diffInMinutes($post->created_at) < 5)
-        {{-- @component('components.badge', ['type' => 'primary'])
-            Brand new post!
-        @endcomponent --}}
-
-        <x-badge type="primary">
-            Brand new post!
-        </x-badge>
-
-    @endif
 
     <h1>Comments</h1>
 
