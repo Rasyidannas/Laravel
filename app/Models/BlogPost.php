@@ -44,7 +44,7 @@ class BlogPost extends Model
     public static function booted(): void
     {
         //apply global scope
-        static::addGlobalScope(new DeletedAdminScope());
+        static::addGlobalScope(new DeletedAdminScope);
 
         //this is for delete comments(foreign key) and it can related to comments for soft deleted
         static::deleting(function (BlogPost $blogPost) {

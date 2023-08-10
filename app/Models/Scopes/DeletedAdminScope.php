@@ -15,8 +15,8 @@ class DeletedAdminScope implements Scope
     public function apply(Builder $builder, Model $model)
     {
         if (Auth::check() && Auth::user()->is_admin) {
-            // $builder->withTrashed();
-            $builder->withoutGlobalScope('Illuminate\Database\Eloquent\SoftDeletingScope');
+            $builder->withTrashed();
+            // $builder->withoutGlobalScope('Illuminate\Database\Eloquent\SoftDeletingScope');
         }
     }
 }
