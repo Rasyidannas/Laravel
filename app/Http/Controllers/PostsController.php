@@ -112,8 +112,13 @@ class PostsController extends Controller
             return BlogPost::with('comments')->findOrFail($id); 
         });
 
+        $counter = 0;
+
         //faindOrFail is a collection ORM Laravel
-        return view('posts.show', ['post' => $blogpost]);
+        return view('posts.show', [
+            'post' => $blogpost,
+            'counter' => $counter 
+        ]);
     }
 
     /**
