@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 
 class BlogPost extends Model
 {
@@ -49,6 +50,12 @@ class BlogPost extends Model
         //this is for delete comments(foreign key) and it can related to comments for soft deleted
         static::deleting(function (BlogPost $blogPost) {
             $blogPost->comments()->delete();
+        });
+
+        //this is for update connect with cache
+        static::updating(function (Blogpost $blogpost) {
+            //this is for deleting cache 
+            Cache::forget("blog-post-{$blogpost->id}");
         });
 
         //this is for restore soft delete for blogpost and comments table

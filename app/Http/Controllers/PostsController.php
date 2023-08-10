@@ -40,16 +40,16 @@ class PostsController extends Controller
      */
     public function index()
     {
-        //this is usign cache for storing data
-        $mostCommented = Cache::remember('mostCommented', now()->addSeconds(10), function() {
+        //this is usign cache for storing data and retrieving
+        $mostCommented = Cache::remember('blog-post-commented', 60, function() {
             return BlogPost::mostCommented()->take(5)->get();
         });
         
-        $mostActive = Cache::remember('mostActive', now()->addSeconds(10), function() {
+        $mostActive = Cache::remember('users-most-active', 60, function() {
             return User::withMostBlogPosts()->take(5)->get();//this is call local scope
         });
 
-        $mostActiveLastMonth = Cache::remember('mostActiveLastMonth', now()->addSeconds(10), function() {
+        $mostActiveLastMonth = Cache::remember('users-most-active-last-month', 60, function() {
             return User::withMostBlogPostsLastMonth()->take(5)->get();//this is call local scope
         });
 
@@ -108,8 +108,12 @@ class PostsController extends Controller
         //     return $query->latest(); //this is for call local scope with relationship this is first away
         // }])->findOrFail($id)]);
 
+        $blogpost = Cache::remember("blog-post-{$id}", 60, function() use($id) {
+            return BlogPost::with('comments')->findOrFail($id); 
+        });
+
         //faindOrFail is a collection ORM Laravel
-        return view('posts.show', ['post' => BlogPost::with('comments')->findOrFail($id)]);
+        return view('posts.show', ['post' => $blogpost]);
     }
 
     /**
