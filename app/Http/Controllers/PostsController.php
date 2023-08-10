@@ -112,7 +112,40 @@ class PostsController extends Controller
             return BlogPost::with('comments')->findOrFail($id); 
         });
 
-        $counter = 0;
+        //this is read the current user session id
+        $sessionId = session()->getId();
+        $counterKey = "blog-post-{$id}-counter";
+        $usersKey = "blog-post-{$id}-users";
+
+        $users = Cache::get($usersKey, []);
+        $usersUpdate = [];
+        $difference = 0;
+        $now = now();
+
+        //this $session as key and $lastVisit as value
+        foreach ($users as $session => $lastVisit){
+            if($now->diffInMinutes($lastVisit) >= 1) {//this is for user more than 1 minutes, so it will remove decrease $difference 
+                $difference--;
+            }else{
+                $usersUpdate[$session] = $lastVisit;
+            }
+        }
+
+        if(!array_key_exists($sessionId, $users) || $now->diffInMinutes($users[$sessionId]) >= 1){
+            $difference++;
+        }
+
+        $usersUpdate[$sessionId] = $now;
+        //this is for store in cache
+        Cache::forever($usersKey, $usersUpdate);
+
+        if(!Cache::has($counterKey)){
+            Cache::forever($counterKey, 1);
+        } else {
+            Cache::increment($counterKey, $difference);
+        }
+
+        $counter = Cache::get($counterKey);
 
         //faindOrFail is a collection ORM Laravel
         return view('posts.show', [
