@@ -6,8 +6,7 @@ use App\Http\Requests\StorePost;
 use Illuminate\Http\Request;
 use App\Models\BlogPost;
 use App\Models\User;
-use Illuminate\Support\Facades\Gate;
-// use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class PostsController extends Controller
 {
@@ -41,30 +40,24 @@ class PostsController extends Controller
      */
     public function index()
     {
-        // DB::connection()->enableQueryLog();
+        //this is usign cache for storing data
+        $mostCommented = Cache::remember('mostCommented', now()->addSeconds(10), function() {
+            return BlogPost::mostCommented()->take(5)->get();
+        });
+        
+        $mostActive = Cache::remember('mostActive', now()->addSeconds(10), function() {
+            return User::withMostBlogPosts()->take(5)->get();//this is call local scope
+        });
 
-        // //this is eager loading
-        // // $posts = BlogPost::with('comments')->get();
+        $mostActiveLastMonth = Cache::remember('mostActiveLastMonth', now()->addSeconds(10), function() {
+            return User::withMostBlogPostsLastMonth()->take(5)->get();//this is call local scope
+        });
 
-        // //this is lazy loading
-        // $posts = BlogPost::all();
-
-        // foreach($posts as $post) {
-        //     foreach ($post->comments as $comment) {
-        //         echo $comment->content;
-        //     }
-        // }
-
-
-        // dd(DB::getQueryLog());
-
-        // orderBy is a query builder
-        // return view('posts.index', ['posts' => BlogPost::orderBy('created_at', 'desc')->take(5)->get()]);
         return view('posts.index', [
             'posts' => BlogPost::latest()->withCount('comments')->with('user')->get(),
-            'mostCommented' => BlogPost::mostCommented()->take(5)->get(), //this is call local scope
-            'mostActive' => User::withMostBlogPosts()->take(5)->get(),
-            'mostActiveLastMonth' => User::withMostBlogPostsLastMonth()->take(5)->get()
+            'mostCommented' => $mostCommented, 
+            'mostActive' => $mostActive,
+            'mostActiveLastMonth' => $mostActiveLastMonth
         ]); //latest() this is from local scope in model
     }
 
