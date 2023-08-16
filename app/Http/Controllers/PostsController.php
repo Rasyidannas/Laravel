@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\BlogPost;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 
 class PostsController extends Controller
 {
