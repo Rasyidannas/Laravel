@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\Blogpost;
 use App\Models\Comment;
+use Illuminate\Support\Facades\Cache;
 
 class DatabaseSeeder extends Seeder
 {
@@ -28,6 +29,9 @@ class DatabaseSeeder extends Seeder
             $this->command->call('migrate:refresh');
             $this->command->info('Database was refreshed');
         }
+
+        //for remove cahce tags in PostController
+        Cache::tags(['blog-post'])->flush();
 
         $this->call([
             UserTableSeeder::class, 
