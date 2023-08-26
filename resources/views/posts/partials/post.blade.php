@@ -18,6 +18,8 @@
     {{-- this is using component  --}}
     <x-updated :date="$post->created_at" :name="$post->user->name" />
 
+    <x-tags :tags="$post->tags" />
+
 @if($post->comments_count)
     <p>{{ $post->comments_count }} comments </p>
 @else
