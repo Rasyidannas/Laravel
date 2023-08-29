@@ -25,6 +25,8 @@
 
         <h1>Comments</h1>
 
+        @include('comments.form')
+
         @forelse($post->comments as $comment)
             <p>
                 {{ $comment->content }}
