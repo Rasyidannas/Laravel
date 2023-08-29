@@ -32,7 +32,7 @@
             
             <p class="text-muted">
                 {{-- this is using component  --}}
-                <x-updated :date="$comment->created_at"/>
+                <x-updated :date="$comment->created_at" :name="$comment->user->name" />
             </p>
         @empty 
             <p>No comments yet!</p>

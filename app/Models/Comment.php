@@ -22,12 +22,17 @@ class Comment extends Model
         // return $this->belongsTo('App\Models\BlogPost', 'post_id', 'blog_post_id');
     }
 
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
+
+
     //this is local scope
     public function scopeLatest(Builder $query)
     {
         return $query->orderBy(static::CREATED_AT, 'desc');
     }
-
 
     public static function booted(): void
     {
