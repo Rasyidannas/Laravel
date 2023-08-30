@@ -96,7 +96,9 @@ class PostsController extends Controller
         // }])->findOrFail($id)]);
 
         $blogpost = Cache::tags(['blog-post'])->remember("blog-post-{$id}", 60, function() use($id) {
-            return BlogPost::with('comments')->with('tags')->with('user')->findOrFail($id); 
+            //comments.user is nested relationship (comments relationship to user)
+            return BlogPost::with('comments', 'tags', 'user', 'comments.user')
+            ->findOrFail($id); 
         });
 
         //this is read the current user session id
