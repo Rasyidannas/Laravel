@@ -44,7 +44,7 @@ class PostsController extends Controller
         
 
         return view('posts.index', [
-            'posts' => BlogPost::latest()->withCount('comments')->with('user')->with('tags')->get()
+            'posts' => BlogPost::latestWithRelations()->get()
         ]); //latest() this is from local scope in model
     }
 

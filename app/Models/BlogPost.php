@@ -47,6 +47,15 @@ class BlogPost extends Model
         return $query->withCount('comments')->orderBy('comments_count', 'desc');
     }
 
+    //this is local scope
+    public function scopeLatestWithRelations(Builder $query)
+    {
+        return $query->latest()
+                ->withCount('comments')
+                ->with('user')
+                ->with('tags');
+    }
+
     public static function booted(): void
     {
         //apply global scope
