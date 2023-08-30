@@ -2,17 +2,21 @@
 
 namespace App\Models;
 
+use App\Models\Comment;
 use App\Models\Scopes\LatestScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 
 class Comment extends Model
 {
     use HasFactory;
 
     use SoftDeletes;
+
+    protected $fillable = ['user_id', 'content'];
 
     public function blogPost()
     {
@@ -38,5 +42,12 @@ class Comment extends Model
     {
         //apply global scope
         // static::addGlobalScope(new LatestScope);
+
+        //this is for create connect with cache
+        static::creating(function (Comment $comment) {
+            //this is for deleting cache 
+            Cache::tags(['blog-post'])->forget("blog-post-{$comment->blog_post_id}");
+            Cache::tags(['blog-post'])->forget("mostCommented");
+        });
     }
 }
