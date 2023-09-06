@@ -76,6 +76,18 @@ class PostsController extends Controller
         // using mass assigment connect with model BlogPost
         $post = BlogPost::create($validated);
 
+        $hasFile = $request->hasFile('thumbnail');
+        dump($hasFile);
+
+        if($hasFile){
+            $file = $request->file('thumbnail');
+            dump($file);
+
+            dump($file->store('thumbnails'));//this will store in storage/app/public/thumbnails
+        }
+
+        die;
+
         // success session
         $request->session()->flash('status', 'The blog post was created!');
 
