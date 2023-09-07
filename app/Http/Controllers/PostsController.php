@@ -43,7 +43,7 @@ class PostsController extends Controller
     public function index()
     {
         //this is usign cache for storing data and retrieving
-        
+
 
         return view('posts.index', [
             'posts' => BlogPost::latestWithRelations()->get()
@@ -79,8 +79,8 @@ class PostsController extends Controller
         $blogPost = BlogPost::create($validated);
 
         //File Storage
-        if($request->hasFile('thumbnail')){
-           $path = $request->file('thumbnail')->store('thumbnails');
+        if ($request->hasFile('thumbnail')) {
+            $path = $request->file('thumbnail')->store('thumbnails');
             $blogPost->image()->save(
                 Image::create(['path' => $path])
             );
@@ -105,10 +105,10 @@ class PostsController extends Controller
         //     return $query->latest(); //this is for call local scope with relationship this is first away
         // }])->findOrFail($id)]);
 
-        $blogpost = Cache::tags(['blog-post'])->remember("blog-post-{$id}", 60, function() use($id) {
+        $blogpost = Cache::tags(['blog-post'])->remember("blog-post-{$id}", 60, function () use ($id) {
             //comments.user is nested relationship (comments relationship to user)
             return BlogPost::with('comments', 'tags', 'user', 'comments.user')
-            ->findOrFail($id); 
+                ->findOrFail($id);
         });
 
         //this is read the current user session id
@@ -122,15 +122,15 @@ class PostsController extends Controller
         $now = now();
 
         //this $session as key and $lastVisit as value
-        foreach ($users as $session => $lastVisit){
-            if($now->diffInMinutes($lastVisit) >= 1) {//this is for user more than 1 minutes, so it will remove decrease $difference 
+        foreach ($users as $session => $lastVisit) {
+            if ($now->diffInMinutes($lastVisit) >= 1) { //this is for user more than 1 minutes, so it will remove decrease $difference 
                 $difference--;
-            }else{
+            } else {
                 $usersUpdate[$session] = $lastVisit;
             }
         }
 
-        if(!array_key_exists($sessionId, $users) || $now->diffInMinutes($users[$sessionId]) >= 1){
+        if (!array_key_exists($sessionId, $users) || $now->diffInMinutes($users[$sessionId]) >= 1) {
             $difference++;
         }
 
@@ -138,7 +138,7 @@ class PostsController extends Controller
         //this is for store in cache
         Cache::tags(['blog-post'])->forever($usersKey, $usersUpdate);
 
-        if(!Cache::tags(['blog-post'])->has($counterKey)){
+        if (!Cache::tags(['blog-post'])->has($counterKey)) {
             Cache::tags(['blog-post'])->forever($counterKey, 1);
         } else {
             Cache::tags(['blog-post'])->increment($counterKey, $difference);
@@ -149,7 +149,7 @@ class PostsController extends Controller
         //faindOrFail is a collection ORM Laravel
         return view('posts.show', [
             'post' => $blogpost,
-            'counter' => $counter 
+            'counter' => $counter
         ]);
     }
 
@@ -180,6 +180,21 @@ class PostsController extends Controller
         // if (Gate::denies('update-post', $post)) {
         //     abort(403, "You can't edit this blog post!");
         // }
+
+        //File Storage
+        if ($request->hasFile('thumbnail')) {
+            $path = $request->file('thumbnail')->store('thumbnails');
+
+            if ($post->image) {
+                Storage::delete($post->image->path);
+                $post->image->path = $path;
+                $post->image->save();
+            } else {
+                $post->image()->save(
+                    Image::create(['path' => $path])
+                );
+            }
+        }
 
         //for short hand authorization
         $this->authorize($post);
