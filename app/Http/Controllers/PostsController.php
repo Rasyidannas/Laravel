@@ -77,6 +77,7 @@ class PostsController extends Controller
         // using mass assigment connect with model BlogPost
         $blogPost = BlogPost::create($validated);
 
+        //File Storage
         $hasFile = $request->hasFile('thumbnail');
         dump($hasFile);
 
@@ -89,8 +90,12 @@ class PostsController extends Controller
             dump(Storage::disk('public')->putFile('thumbnails', $file));//this is second away
         
             //this is manualy give name/rename
-            dump($file->storeAs('thumbnails', $blogPost->id . "." . $file->guessExtension()));
-            dump(Storage::putFileAs('thumbnails', $file, $blogPost->id . "." . $file->guessExtension()));
+            $name1 = $file->storeAs('thumbnails', $blogPost->id . "." . $file->guessExtension());
+            $name2 = Storage::disk('local')->putFileAs('thumbnails', $file, $blogPost->id . "." . $file->guessExtension());
+
+            //get tge URL
+            dump(Storage::url($name1));
+            dump(Storage::disk('local')->url($name2));
         }
 
         die;
