@@ -23,6 +23,10 @@
 
         <p>Currently read by {{ $counter }} people</p>
 
+        {{-- <img src="{{ Storage::url($post->image->path) }}"/> --}}
+        {{-- this is form Image Model using function url() --}}
+        <img src="{{ $post->image->url() }}"/>
+
         <h1>Comments</h1>
 
         @include('comments.form')
