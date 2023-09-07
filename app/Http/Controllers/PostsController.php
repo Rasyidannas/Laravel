@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\BlogPost;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 
 class PostsController extends Controller
 {
@@ -74,7 +75,7 @@ class PostsController extends Controller
         $validated['user_id'] = $request->user()->id;
 
         // using mass assigment connect with model BlogPost
-        $post = BlogPost::create($validated);
+        $blogPost = BlogPost::create($validated);
 
         $hasFile = $request->hasFile('thumbnail');
         dump($hasFile);
@@ -83,7 +84,13 @@ class PostsController extends Controller
             $file = $request->file('thumbnail');
             dump($file);
 
-            dump($file->store('thumbnails'));//this will store in storage/app/public/thumbnails
+            //this automaticall will give name and store in storage/app/public/thumbnails
+            dump($file->store('thumbnails'));
+            dump(Storage::disk('public')->putFile('thumbnails', $file));//this is second away
+        
+            //this is manualy give name/rename
+            dump($file->storeAs('thumbnails', $blogPost->id . "." . $file->guessExtension()));
+            dump(Storage::putFileAs('thumbnails', $file, $blogPost->id . "." . $file->guessExtension()));
         }
 
         die;
@@ -91,7 +98,7 @@ class PostsController extends Controller
         // success session
         $request->session()->flash('status', 'The blog post was created!');
 
-        return redirect()->route('posts.show', ['post' => $post->id]);
+        return redirect()->route('posts.show', ['post' => $blogPost->id]);
     }
 
     /**
