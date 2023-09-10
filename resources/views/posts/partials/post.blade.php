@@ -16,7 +16,7 @@
     @endif
 </h3>
     {{-- this is using component  --}}
-    <x-updated :date="$post->created_at" :name="$post->user->name" />
+    <x-updated :date="$post->created_at" :name="$post->user->name" :userId="$post->user->id" />
 
     <x-tags :tags="$post->tags" />
 
