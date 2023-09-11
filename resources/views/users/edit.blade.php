@@ -7,7 +7,7 @@
 
         <div class="row">
             <div class="col-4">
-                <img src="" class="img-thumbnail avatar" />
+                <img src="{{ $user->image ? $user->image->url() : '' }}" class="img-thumbnail avatar" />
                 <div class="card mt-4">
                     <div class="card-body">
                         <h6>Upload different photo</h6>
@@ -20,6 +20,9 @@
                     <label for="">Name:</label>
                     <input class="form-control" value="" type="text" name="name" />
                 </div>
+
+                <x-errors />
+
                 <div class="form-group">
                     <input class="btn btn-primary" type="submit" value="Save Changes">
                 </div>
