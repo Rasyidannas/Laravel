@@ -27,7 +27,7 @@ return new class extends Migration
         Schema::table('comments', function (Blueprint $table) {
             $table->dropMorphs('commentable');
 
-            $table->unsignedInteger('blog_post_id')->index();
+            $table->unsignedInteger('blog_post_id')->index()->nullable();
             $table->foreign('blog_post_id')->references('id')->on('blog_posts');
         });
     }
