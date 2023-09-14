@@ -46,12 +46,15 @@ class PostTest extends TestCase
     public function testSee1BlogPostWithComments()
     {
         //arrange
+        $user = $this->user();
         $post = $this->createDummyBlogpost();
         $comment = new Comment();
 
         // this is Instantiating Models with call factory
         $comment::factory()->count(4)->create([
-            'blog_post_id' => $post->id
+            'commentable_id' => $post->id,
+            'commentable_type' => 'App\Models\BlogPost',
+            'user_id' => $user->id
         ]);
 
         // act
