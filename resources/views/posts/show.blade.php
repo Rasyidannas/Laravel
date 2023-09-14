@@ -40,20 +40,9 @@
 
         <h1>Comments</h1>
 
-        @include('comments.form')
+        <x-commentForm :route="route('posts.comments.store', ['post' => $post->id])" />
 
-        @forelse($post->comments as $comment)
-            <p>
-                {{ $comment->content }}
-            </p>
-            
-            <p class="text-muted">
-                {{-- this is using component  --}}
-                <x-updated :date="$comment->created_at" :name="$comment->user->name" />
-            </p>
-        @empty 
-            <p>No comments yet!</p>
-        @endforelse
+        <x-commentList :comments="$post->comments" />
     </div>
     <div class="col-4">
         @include('posts.partials.activity')
