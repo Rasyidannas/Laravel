@@ -18,6 +18,11 @@ class Comment extends Model
 
     protected $fillable = ['user_id', 'content'];
 
+    public function commentable()
+    {
+        return $this->morphTo();
+    }
+
     public function blogPost()
     {
 
@@ -45,9 +50,11 @@ class Comment extends Model
 
         //this is for create connect with cache
         static::creating(function (Comment $comment) {
-            //this is for deleting cache 
-            Cache::tags(['blog-post'])->forget("blog-post-{$comment->blog_post_id}");
-            Cache::tags(['blog-post'])->forget("mostCommented");
+            if ($comment->commentable_type === App\Models\BlogPost::class) {
+                //this is for deleting cache 
+                Cache::tags(['blog-post'])->forget("blog-post-{$comment->commentable_id}");
+                Cache::tags(['blog-post'])->forget("mostCommented");
+            }
         });
     }
 }

@@ -21,7 +21,7 @@ class BlogPost extends Model
 
     public function comments()
     {
-        return $this->hasMany('App\Models\Comment')->latest();//this latest() from local scope and this is second away
+        return $this->morphMany('App\Models\Comment', 'commentable')->latest();//this latest() from local scope and this is second away
     }
 
     public function user()

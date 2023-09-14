@@ -53,6 +53,12 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Comment');
     }
 
+    public function commentsOn()
+    {
+        return $this->morphMany('App\Models\Comment', 'commentable')->latest();//this latest() from local scope and this is second away
+    }
+
+
     public function image()
     {
         return $this->morphOne('App\Models\Image', 'imageable');
