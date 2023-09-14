@@ -25,10 +25,14 @@ class Comment extends Model
 
     public function blogPost()
     {
-
         return $this->belongsTo('App\Models\BlogPost');
         // this is for custom table
         // return $this->belongsTo('App\Models\BlogPost', 'post_id', 'blog_post_id');
+    }
+
+    public function tags()
+    {
+        return $this->morphToMany('App\Models\Tag', 'taggable')->withTimestamps();
     }
 
     public function user()
