@@ -3,6 +3,8 @@
         {{ $comment->content }}
     </p>
     
+    <x-tags :tags="$comment->tags" />
+    
     <p class="text-muted">
         {{-- this is using component  --}}
         <x-updated :date="$comment->created_at" :name="$comment->user->name" :userId="$comment->user->id" />
