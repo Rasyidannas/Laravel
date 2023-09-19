@@ -9,6 +9,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailables\Attachment;
 
 class CommentPosted extends Mailable
 {
@@ -51,6 +52,10 @@ class CommentPosted extends Mailable
      */
     public function attachments(): array
     {
-        return [];
+        return [
+            // Attachment::fromStorage($this->comment->user->image->path, 'profile_picture.jpeg')
+            //         ->as('profile_picture')//this is for rename file
+            //         ->withMime('image/jpeg')
+        ];
     }
 }
