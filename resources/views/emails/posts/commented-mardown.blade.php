@@ -1,11 +1,21 @@
 <x-mail::message>
-# Introduction
+# Comment was posted on your blog post
 
-Hello from mrakdown.
+Hi {{ $comment->commentable->user->name }}
 
-<x-mail::button :url="''">
-Button Text
+Someone had commented in your blog post
+
+<x-mail::button :url="route('posts.show', ['post' => $comment->commentable->id])">
+View The Blog Post
 </x-mail::button>
+
+<x-mail::button :url="route('users.show', ['user' => $comment->user->id])">
+Visit {{ $comment->user->name }} profile
+</x-mail::button>
+
+<x-mail::panel>
+    {{ $comment->content }}
+</x-mail::panel>
 
 Thanks,<br>
 {{ config('app.name') }}

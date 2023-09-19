@@ -8,17 +8,20 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use App\Models\Comment;
 
 class CommentPostedMarkdown extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $comment;
+
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(Comment $comment)
     {
-        //
+        $this->comment = $comment;
     }
 
     /**
@@ -27,7 +30,7 @@ class CommentPostedMarkdown extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Comment Posted Markdown',
+            subject: "Comment was posted on your {$this->comment->commentable->title} blog pots",
         );
     }
 
