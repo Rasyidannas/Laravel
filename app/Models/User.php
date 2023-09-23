@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Builder;
+use App\Models\BlogPost;
+use Faker\Core\Blood;
 
 class User extends Authenticatable
 {
@@ -75,5 +77,13 @@ class User extends Authenticatable
             $query->whereBetween(static::CREATED_AT, [now()->subMonths(1), now()]);
         }])->has('blogPosts', '>=', 2)//yang memiliki blogpost lebih dari sama dengan 2
             ->orderBy('blog_posts_count', 'desc'); //blog_post_count will be new field cause orderBy
+    }
+
+    public function scopeThatHasCommentedOnPost(Builder $query, BlogPost $post) 
+    {
+        return $query->whereHas('comments', function($query) use($post){
+            return $query->where('commentable_id', '=', $post->id)
+                    ->where('commentable_type', '=', BlogPost::class);
+        });
     }
 }
