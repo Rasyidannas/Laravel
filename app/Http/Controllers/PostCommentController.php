@@ -7,6 +7,7 @@ use App\Mail\CommentPosted;
 use App\Mail\CommentPostedMarkdown;
 use App\Models\BlogPost;
 use Illuminate\Support\Facades\Mail;
+use App\Jobs\NotifyUsersPostWasCommented;
 
 class PostCommentController extends Controller
 {
@@ -26,16 +27,18 @@ class PostCommentController extends Controller
         //     new CommentPostedMarkdown($comment)
         // );
 
-        // Mail::to($post->user)->queue(
-        //     new CommentPostedMarkdown($comment)
-        // );
-
-        $when = now()->addMinutes(1);
-
-        Mail::to($post->user)->later(
-            $when,
+        Mail::to($post->user)->queue(
             new CommentPostedMarkdown($comment)
         );
+
+        NotifyUsersPostWasCommented::dispatch($comment);
+
+        // $when = now()->addMinutes(1);
+
+        // Mail::to($post->user)->later(
+        //     $when,
+        //     new CommentPostedMarkdown($comment)
+        // );
 
         // success session
         // $request->session()->flash('status', 'Comment was created!');
