@@ -10,7 +10,7 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Comment;
 
-class CommentPostedMarkdown extends Mailable
+class CommentPostedMarkdown extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
