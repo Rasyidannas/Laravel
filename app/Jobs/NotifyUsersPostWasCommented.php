@@ -11,7 +11,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Comment;
 use App\Models\User;
-use Illuminate\Support\Facades\Mail;
 
 class NotifyUsersPostWasCommented implements ShouldQueue
 {
@@ -37,8 +36,9 @@ class NotifyUsersPostWasCommented implements ShouldQueue
                 ->filter(function(User $user){
                     return $user->id !== $this->comment->user_id;
                 })->map(function (User $user) {
-                    Mail::to($user)->send(
-                        new CommentPostedOnPostWatched($this->comment, $user )
+                    ThrottledMail::dispatch(
+                        new CommentPostedOnPostWatched($this->comment, $user),
+                        $user
                     );
                 });
     }

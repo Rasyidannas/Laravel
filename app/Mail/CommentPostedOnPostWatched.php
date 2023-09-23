@@ -11,7 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\Comment;
 use App\Models\User;
 
-class CommentPostedOnPostWatched extends Mailable implements ShouldQueue
+class CommentPostedOnPostWatched extends Mailable
 {
     use Queueable, SerializesModels;
 
