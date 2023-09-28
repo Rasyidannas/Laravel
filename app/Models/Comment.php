@@ -47,14 +47,5 @@ class Comment extends Model
     {
         //apply global scope
         // static::addGlobalScope(new LatestScope);
-
-        //this is for create connect with cache
-        static::creating(function (Comment $comment) {
-            if ($comment->commentable_type === BlogPost::class) {
-                //this is for deleting cache 
-                Cache::tags(['blog-post'])->forget("blog-post-{$comment->commentable_id}");
-                Cache::tags(['blog-post'])->forget("mostCommented");
-            }
-        });
     }
 }

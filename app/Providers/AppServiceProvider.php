@@ -3,6 +3,10 @@
 namespace App\Providers;
 
 use App\Http\ViewComposers\ActivityComposer;
+use App\Models\BlogPost;
+use App\Models\Comment;
+use App\Observers\BlogPostObserver;
+use App\Observers\CommentObserver;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades;
@@ -35,5 +39,8 @@ class AppServiceProvider extends ServiceProvider
 
         // Facades\View::composer(['*'], ActivityComposer::class); //* for all views
         Facades\View::composer(['posts.index', 'posts.show'], ActivityComposer::class);
+
+        BlogPost::observe(BlogPostObserver::class);
+        Comment::observe(CommentObserver::class);
     }
 }

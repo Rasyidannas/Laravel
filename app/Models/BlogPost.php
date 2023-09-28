@@ -61,22 +61,5 @@ class BlogPost extends Model
     {
         //apply global scope
         static::addGlobalScope(new DeletedAdminScope);
-
-        //this is for delete comments(foreign key) and it can related to comments for soft deleted
-        static::deleting(function (BlogPost $blogPost) {
-            $blogPost->comments()->delete();
-            Cache::tags(['blog-post'])->forget("blog-post-{$blogPost->id}");
-        });
-
-        //this is for update connect with cache
-        static::updating(function (Blogpost $blogPost) {
-            //this is for deleting cache 
-            Cache::tags(['blog-post'])->forget("blog-post-{$blogPost->id}");
-        });
-
-        //this is for restore soft delete for blogpost and comments table
-        static::restoring(function (BlogPost $blogPost) {
-            $blogPost->comments()->restore();
-        });
     }
 }
