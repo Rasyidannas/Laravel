@@ -1,27 +1,34 @@
-<?php 
+<?php
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Cache;
+// use Illuminate\Support\Facades\Cache;
+use Illuminate\Contracts\Cache\Factory as Cache;
+use Illuminate\Contracts\Session\Session;
 
 class Counter
 {
-    private $timeout;
+    private $timeout, $cache, $session, $supportsTags;
 
-    public function __construct(int $timeout)
+    public function __construct(Cache $cache, Session $session, int $timeout)
     {
         //this is dependency injection
         $this->timeout = $timeout;
+        $this->cache = $cache;
+        $this->session = $session;
+        $this->supportsTags = method_exists($cache, 'tags');
     }
 
     public function increment(string $key, array $tags = null): int
     {
         //this is read the current user session id
-        $sessionId = session()->getId();
+        $sessionId = $this->session->getId();
         $counterKey = "{$key}-counter";
         $usersKey = "{$key}-users";
 
-        $users = Cache::tags(['blog-post'])->get($usersKey, []);
+        $cache = $this->supportsTags && null !== $tags ? $this->cache->tags($tags) : $this->cache;
+
+        $users = $cache->get($usersKey, []);
         $usersUpdate = [];
         $difference = 0;
         $now = now();
@@ -41,15 +48,15 @@ class Counter
 
         $usersUpdate[$sessionId] = $now;
         //this is for store in cache
-        Cache::tags(['blog-post'])->forever($usersKey, $usersUpdate);
+        $cache->forever($usersKey, $usersUpdate);
 
-        if (!Cache::tags(['blog-post'])->has($counterKey)) {
-            Cache::tags(['blog-post'])->forever($counterKey, 1);
+        if (!$cache->has($counterKey)) {
+            $cache->forever($counterKey, 1);
         } else {
-            Cache::tags(['blog-post'])->increment($counterKey, $difference);
+            $cache->increment($counterKey, $difference);
         }
 
-        $counter = Cache::tags(['blog-post'])->get($counterKey);
+        $counter = $cache->get($counterKey);
 
         return $counter;
     }
