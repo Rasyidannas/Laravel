@@ -122,8 +122,6 @@ class PostsController extends Controller
         //this is for count user viewing/watching and using  service container
         // $counter = resolve(Counter::class);
 
-        dd($this->counter);
-
         //faindOrFail is a collection ORM Laravel
         return view('posts.show', [
             'post' => $blogpost,
