@@ -13,10 +13,15 @@ use Illuminate\Support\Facades\Storage;
 
 class PostsController extends Controller
 {
-    public function __construct()
+    private $counter;
+
+    public function __construct(Counter $counter)
     {
         //$this->middleware('auth');//this is for only user login/authenticated
         $this->middleware('auth')->only(['create', 'store', 'edit', 'update', 'destroy']);
+
+        //this is dependency injection
+        $this->counter = $counter;
     }
 
     private $posts = [
@@ -115,12 +120,14 @@ class PostsController extends Controller
         });
 
         //this is for count user viewing/watching and using  service container
-        $counter = resolve(Counter::class);
+        // $counter = resolve(Counter::class);
+
+        dd($this->counter);
 
         //faindOrFail is a collection ORM Laravel
         return view('posts.show', [
             'post' => $blogpost,
-            'counter' => $counter->increment("blog-post{$id}", ['blog-post'])
+            'counter' => $this->counter->increment("blog-post{$id}", ['blog-post'])
         ]);
     }
 

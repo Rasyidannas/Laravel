@@ -10,6 +10,7 @@ class Counter
 
     public function __construct(int $timeout)
     {
+        //this is dependency injection
         $this->timeout = $timeout;
     }
 
