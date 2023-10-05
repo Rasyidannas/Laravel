@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Contracts\CounterContract;
 use App\Events\BlogPostPosted;
+use App\Facades\CounterFacade;
 use App\Http\Requests\StorePost;
 use Illuminate\Http\Request;
 use App\Models\BlogPost;
@@ -13,15 +13,10 @@ use Illuminate\Support\Facades\Storage;
 
 class PostsController extends Controller
 {
-    private $counter;
-
-    public function __construct(CounterContract $counter)
+    public function __construct()
     {
         //$this->middleware('auth');//this is for only user login/authenticated
         $this->middleware('auth')->only(['create', 'store', 'edit', 'update', 'destroy']);
-
-        //this is dependency injection
-        $this->counter = $counter;
     }
 
     private $posts = [
@@ -125,7 +120,7 @@ class PostsController extends Controller
         //faindOrFail is a collection ORM Laravel
         return view('posts.show', [
             'post' => $blogpost,
-            'counter' => $this->counter->increment("blog-post{$id}", ['blog-post'])
+            'counter' => CounterFacade::increment("blog-post{$id}", ['blog-post'])
         ]);
     }
 
