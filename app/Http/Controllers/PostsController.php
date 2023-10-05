@@ -114,8 +114,8 @@ class PostsController extends Controller
                 ->findOrFail($id);
         });
 
-        //this is for count user viewing/watching
-        $counter = new Counter;
+        //this is for count user viewing/watching and using  service container
+        $counter = resolve(Counter::class);
 
         //faindOrFail is a collection ORM Laravel
         return view('posts.show', [

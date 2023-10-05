@@ -45,7 +45,8 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $counter = new Counter;
+        //this is for count user viewing/watching and using  service container
+        $counter = resolve(Counter::class);
         return view('users.show', ['user' => $user, 'counter' => $counter->increment("user-{$user->id}")]);
     }
 
