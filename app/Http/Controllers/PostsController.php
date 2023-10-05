@@ -7,6 +7,7 @@ use App\Http\Requests\StorePost;
 use Illuminate\Http\Request;
 use App\Models\BlogPost;
 use App\Models\Image;
+use App\Services\Counter;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
@@ -113,45 +114,13 @@ class PostsController extends Controller
                 ->findOrFail($id);
         });
 
-        //this is read the current user session id
-        $sessionId = session()->getId();
-        $counterKey = "blog-post-{$id}-counter";
-        $usersKey = "blog-post-{$id}-users";
-
-        $users = Cache::tags(['blog-post'])->get($usersKey, []);
-        $usersUpdate = [];
-        $difference = 0;
-        $now = now();
-
-        //this $session as key and $lastVisit as value
-        foreach ($users as $session => $lastVisit) {
-            if ($now->diffInMinutes($lastVisit) >= 1) { //this is for user more than 1 minutes, so it will remove decrease $difference 
-                $difference--;
-            } else {
-                $usersUpdate[$session] = $lastVisit;
-            }
-        }
-
-        if (!array_key_exists($sessionId, $users) || $now->diffInMinutes($users[$sessionId]) >= 1) {
-            $difference++;
-        }
-
-        $usersUpdate[$sessionId] = $now;
-        //this is for store in cache
-        Cache::tags(['blog-post'])->forever($usersKey, $usersUpdate);
-
-        if (!Cache::tags(['blog-post'])->has($counterKey)) {
-            Cache::tags(['blog-post'])->forever($counterKey, 1);
-        } else {
-            Cache::tags(['blog-post'])->increment($counterKey, $difference);
-        }
-
-        $counter = Cache::tags(['blog-post'])->get($counterKey);
+        //this is for count user viewing/watching
+        $counter = new Counter;
 
         //faindOrFail is a collection ORM Laravel
         return view('posts.show', [
             'post' => $blogpost,
-            'counter' => $counter
+            'counter' => $counter->increment("blog-post{$id}", ['blog-post'])
         ]);
     }
 
