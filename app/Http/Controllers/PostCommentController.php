@@ -17,7 +17,7 @@ class PostCommentController extends Controller
     public function index(BlogPost $post)
     {
         //this is for API resources
-        return CommentResource::collection($post->comments);
+        return CommentResource::collection($post->comments()->with('user')->get());
         
         // dd($post->comments);
         //this will return json format
