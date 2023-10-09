@@ -17,7 +17,7 @@ class PostCommentController extends Controller
     {
         // dd($post->comments);
         //this will return json format
-        return $post->comments;
+        return $post->comments()->with('user')->get();
     }
 
     public function store(BlogPost $post, StoreComment $request)
