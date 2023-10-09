@@ -15,6 +15,7 @@ class PostCommentController extends Controller
 
     public function index(BlogPost $post)
     {
+        // dd($post->comments);
         //this will return json format
         return $post->comments;
     }
