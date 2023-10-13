@@ -15,8 +15,8 @@ class PostsController extends Controller
 {
     public function __construct()
     {
-        //$this->middleware('auth');//this is for only user login/authenticated
-        $this->middleware('auth')->only(['create', 'store', 'edit', 'update', 'destroy']);
+        //$this->middleware('auth:web');//this is for only user login/authenticated in website using session in auth.php
+        $this->middleware('auth:web')->only(['create', 'store', 'edit', 'update', 'destroy']);
     }
 
     private $posts = [

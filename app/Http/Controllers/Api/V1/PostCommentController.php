@@ -11,6 +11,10 @@ use App\Events\CommentPosted;
 
 class PostCommentController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api')->only(['store']);
+    }
     /**
      * Display a listing of the resource.
      */
@@ -39,7 +43,7 @@ class PostCommentController extends Controller
 
         event(new CommentPosted($comment));
         
-        
+        return new CommentResource($comment);
     }
 
     /**
