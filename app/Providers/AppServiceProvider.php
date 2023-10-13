@@ -61,7 +61,7 @@ class AppServiceProvider extends ServiceProvider
 
         //this is for delelet wrapping in JSON
         // CommentResource::withoutWrapping();
-        Resource::withoutWrapping();
+        // Resource::withoutWrapping();
 
         // $this->app->when(Counter::class)
         //     ->needs('$timeout')
