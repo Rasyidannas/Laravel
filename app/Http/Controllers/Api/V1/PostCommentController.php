@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\BlogPost;
 use App\Http\Resources\Comment as CommentResource;
+use App\Http\Requests\StoreComment;
+use App\Events\CommentPosted;
 
 class PostCommentController extends Controller
 {
@@ -28,9 +30,16 @@ class PostCommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(BlogPost $post, StoreComment $request)
     {
-        //
+        $comment = $post->comments()->create([
+            'content' => $request->input('content'),
+            'user_id' => $request->user()->id
+        ]);
+
+        event(new CommentPosted($comment));
+        
+        
     }
 
     /**
