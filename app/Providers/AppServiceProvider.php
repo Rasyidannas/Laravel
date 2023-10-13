@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
+use App\Http\Resources\Comment as CommentResource;
+use Illuminate\Http\Resources\Json\JsonResource as Resource;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -56,6 +58,10 @@ class AppServiceProvider extends ServiceProvider
             'App\Contracts\CounterContract',
             Counter::class
         );
+
+        //this is for delelet wrapping in JSON
+        // CommentResource::withoutWrapping();
+        Resource::withoutWrapping();
 
         // $this->app->when(Counter::class)
         //     ->needs('$timeout')
