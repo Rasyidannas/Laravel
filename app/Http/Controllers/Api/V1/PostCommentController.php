@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\BlogPost;
+use App\Models\Comment;
 use App\Http\Resources\Comment as CommentResource;
 use App\Http\Requests\StoreComment;
 use App\Events\CommentPosted;
@@ -49,24 +50,29 @@ class PostCommentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(BlogPost $post, Comment $comment)
     {
-        //
+        return new CommentResource($comment);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(BlogPost $post, Comment $comment, StoreComment $request)
     {
-        //
+        $comment->content = $request->input('content');
+        $comment->save();
+
+        return new CommentResource($comment);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(BlogPost $post, Comment $comment)
     {
-        //
+        $comment->delete();
+        
+        return response()->noContent();
     }
 }
