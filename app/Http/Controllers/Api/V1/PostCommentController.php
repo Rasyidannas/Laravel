@@ -60,6 +60,7 @@ class PostCommentController extends Controller
      */
     public function update(BlogPost $post, Comment $comment, StoreComment $request)
     {
+        $this->authorize($comment);//this is for authorization
         $comment->content = $request->input('content');
         $comment->save();
 
@@ -72,7 +73,7 @@ class PostCommentController extends Controller
     public function destroy(BlogPost $post, Comment $comment)
     {
         $comment->delete();
-        
+
         return response()->noContent();
     }
 }
